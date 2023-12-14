@@ -1,6 +1,7 @@
 const User = require("../Models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+
 exports.resetPasswordToken = async (req, res) => {
   try {
     const { email } = req.body;
@@ -18,7 +19,7 @@ exports.resetPasswordToken = async (req, res) => {
         token: token,
         resetPasswordExpires: Date.now() + 5 * 60 * 1000,
       },
-      { new: true }
+      { new: true } //returns the new doc
     );
     const url = `http://localhost:3000/update-password/${token}`;
     await mailSender(

@@ -1,5 +1,6 @@
 const Tag = require("../models/Tags");
-exports.createTag = async () => {
+
+exports.createTag = async (req,res) => {
   try {
     const { name, description } = req.body;
     if (!name || !description) {
@@ -19,12 +20,12 @@ exports.createTag = async () => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: `${err.message}`,
+      message: `Cannot Create Tag ${err.message}`,
     });
   }
 };
 
-exports.showAllTags = async () => {
+exports.showAllTags = async (req,res) => {
   try {
     const allTags = await Tag.find({ name: true, description: true }); //both name and desc should be present
     return res.status(200).json({
@@ -35,7 +36,7 @@ exports.showAllTags = async () => {
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: `${err.message}`,
+      message: `Cannot Show Tags ${err.message}`,
     });
   }
 };

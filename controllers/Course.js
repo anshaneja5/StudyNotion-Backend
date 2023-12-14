@@ -2,11 +2,11 @@ const Course = require("../models/Course");
 const Tag = require("../models/Tags");
 const User = require("../models/User");
 const { uploadImageToCloudinary } = require("../utils/imageUplaoder");
+
 exports.createCourse = async (req, res) => {
   try {
     //fetch data
-    const { courseName, courseDescription, whatYouWillLearn, price, tag } =
-      req.body;
+    const { courseName, courseDescription, whatYouWillLearn, price, tag } = req.body; //here tag is ID
     const { thumbnail } = req.files.thumbnailImage;
 
     //validation
@@ -23,7 +23,7 @@ exports.createCourse = async (req, res) => {
       });
     }
     //check for instructor
-    const userId = req.user.id;
+    const userId = req.user.id; //as already added in payload
     const instructorDetails = await User.findById(userId);
     if (!instructorDetails) {
       return res.status(404).json({
@@ -83,6 +83,7 @@ exports.createCourse = async (req, res) => {
     });
   }
 };
+
 exports.showAllCourses = async (req, res) => {
   try {
     const allCourses = await Course.find(
