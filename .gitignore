@@ -22,3 +22,4 @@ secrets.env
 
 custom_file.txt
 custom_folder/
+.env
