@@ -1,6 +1,7 @@
 const User = require("../Models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const passwordUpdateTemplate = require("../mail/templates/passwordUpdate");
 
 exports.resetPasswordToken = async (req, res) => {
   try {
@@ -41,7 +42,7 @@ exports.resetPasswordToken = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
   try {
-    const { token, password, confirmPassword } = req.body;
+    const { token, password, confirmPassword,email} = req.body;
     if (password !== confirmPassword) {
       return res.json({
         success: false,
@@ -66,6 +67,13 @@ exports.resetPassword = async (req, res) => {
       { token: token },
       { password: hashedPassword },
       { new: true }
+    );
+    //Send Password Sucessfully Updated Email
+    const name = userDetails.firstName;
+    await mailSender(
+      email,
+      "Password Reset Sucessfully | StudyNotion",
+      passwordUpdateTemplate(email,name)
     );
     return res.status(200).json({
       success: true,

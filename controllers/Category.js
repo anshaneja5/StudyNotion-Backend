@@ -1,6 +1,6 @@
-const Tag = require("../models/Tags");
+const Category = require("../models/Category");
 
-exports.createTag = async (req,res) => {
+exports.createCategory = async (req,res) => {
   try {
     const { name, description } = req.body;
     if (!name || !description) {
@@ -9,34 +9,34 @@ exports.createTag = async (req,res) => {
         message: "All fields are required",
       });
     }
-    const tagDetails = await Tag.create({
+    const categoryDetails = await Category.create({
       name: name,
       description: description,
     });
     return res.status(200).json({
       success: true,
-      message: "Tag created sucessfully",
+      message: "Category created sucessfully",
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: `Cannot Create Tag ${err.message}`,
+      message: `Cannot Create Category ${err.message}`,
     });
   }
 };
 
-exports.showAllTags = async (req,res) => {
+exports.showAllCategory = async (req,res) => {
   try {
-    const allTags = await Tag.find({ name: true, description: true }); //both name and desc should be present
+    const allCategory = await Category.find({ name: true, description: true }); //both name and desc should be present
     return res.status(200).json({
       success: true,
-      message: "Tag fetched sucessfully",
-      allTags,
+      message: "Category fetched sucessfully",
+      allCategory,
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      message: `Cannot Show Tags ${err.message}`,
+      message: `Cannot Show Category ${err.message}`,
     });
   }
 };
