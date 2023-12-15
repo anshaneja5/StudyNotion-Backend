@@ -59,7 +59,7 @@ exports.categoryPageDetails = async (req,res)=>{
       _id : {$ne : categoryId}         //find all the courses not equal to category id
     }).populate(courses).exec();
     //now get top selling courses
-    
+    //NOT DONE
   } catch (error) {
     
   }
