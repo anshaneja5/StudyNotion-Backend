@@ -1,12 +1,12 @@
 const {instance} = require("../config/razorpay");
 const Course = require("../models/Course");
 const User = require("../models/User");
-const mailSender = require("../utils.mailSender");
+const mailSender = require("../utils/mailSender");
 const {courseEnrollmentEmail}=require("../mail/templates/courseEnrollmentEmail");
 const { paymentSuccessEmail } = require("../mail/templates/paymentSuccessEmail");
 
 //Capture the payment and initiate the razorpay order  -1
-exports.capturePayment = async (req,res){
+exports.capturePayment = async (req,res) =>{
     const {course_id}=req.body;
     const userId=req.user.id;
     //validate id
@@ -46,12 +46,12 @@ exports.capturePayment = async (req,res){
     const options = {
         amount : amount*100,
         currency,
-        receipt : Math.random(Date.now()).toString(); //Optional
+        receipt : Math.random(Date.now()).toString(),//Optional
         notes:{ //Optional
             courseId:course_id,
             userId,
         }
-    }:
+    }
 
     try {
         //init the payment
@@ -74,7 +74,7 @@ exports.capturePayment = async (req,res){
 }
 
 //verify signature of razorpay and server
-exports.verifySignature = async (req,res){
+exports.verifySignature = async (req,res) =>{
     const webhookSecret="1234567890";
     const signature=req.headers("x-razorpay-signature"); //signature coming from razorpay, and it is hashed 
     const shasum = crypto.createHmac("sha256",webhookSecret);

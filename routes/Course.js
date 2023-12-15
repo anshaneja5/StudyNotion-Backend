@@ -30,13 +30,13 @@ const {
 
 // Rating Controllers Import
 const {
-  createRating,
-  getAverageRating,
-  getAllRating,
-} = require("../controllers/RatingAndReview")
+  createRatingAndReview,
+  getAverageRatingAndReview,
+  getAllRatingAndReview,
+} = require("../controllers/RatingAndReviews")
 
 // Importing Middlewares
-const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
+const { auth, isInstructor, isStudent, isAdmin } = require("../middleware/auth")
 
 
 // Courses can Only be Created by Instructors
@@ -76,8 +76,8 @@ router.post("/getCategoryPageDetails", categoryPageDetails)
 
 // Rating and Review
 
-router.post("/createRating", auth, isStudent, createRating)
-router.get("/getAverageRating", getAverageRating)
-router.get("/getReviews", getAllRating)
+router.post("/createRating", auth, isStudent, createRatingAndReview)
+router.get("/getAverageRating", getAverageRatingAndReview)
+router.get("/getReviews", getAllRatingAndReview)
 
 module.exports = router

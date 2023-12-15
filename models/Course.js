@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const courseSchema = mongoose.Schema({
   courseName: {
     type: String,
-    trim:true;
+    trim:true
   },
   courseDescription: {
     type: String,
-    trim:true;
+    trim:true
   },
   instructor: {
     type: mongoose.Schema.Types.ObjectId,
@@ -16,7 +16,7 @@ const courseSchema = mongoose.Schema({
   },
   whatYouWillLearn: {
     type: String,
-    trim:true;
+    trim:true
   },
   courseContent: [
     {
@@ -32,7 +32,7 @@ const courseSchema = mongoose.Schema({
   ],
   price: {
     type: Number,
-    trim:true;
+    trim:true
   },
   thumbnail: {
     type: String,
@@ -44,7 +44,7 @@ const courseSchema = mongoose.Schema({
   category: {
     type:mongoose.Schema.Types.ObjectId,
     ref:"Category"
-  }
+  },
   studentsEnrolled: [
     {
       type: mongoose.Schema.Types.ObjectId,

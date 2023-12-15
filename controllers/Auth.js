@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const OTP = require("../models/OTP");
-const otpGenerator = require("otpgenerator");
+const otpGenerator = require("otp-generator");
 const Profile = require("../models/Profile");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -195,7 +195,7 @@ async function sendChangedPWDMail(email) {
   try {
     const mailResponse = await mailSender(
       email,
-      "Password SN"
+      "Password SN",
       "Password Changed Sucessfully -  StudyNotion",
     );
   } catch (err) {
@@ -205,7 +205,7 @@ async function sendChangedPWDMail(email) {
 
 exports.changePassword = async (req, res) => {
   try{
-    const {email,oldPassword,newPassword,confirmNewPassword};
+    const {email,oldPassword,newPassword,confirmNewPassword}=req.body;
     if( !email || !oldPassword || !newPassword, !confirmNewPassword){
       return res.status(400).json({
         success:false,

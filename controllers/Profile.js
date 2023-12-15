@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const Profile = require("../models.Profile");
+const Profile = require("../models/Profile");
 
 exports.updateProfile = async (req,res)=>{
     try {
@@ -40,7 +40,7 @@ exports.deleteAccount = async (req,res)=>{
         const userDetails = await User.findById(userId);
         if(!userDetails){
             return res.status(404).json({
-                success:false;
+                success:false,
                 message:"User not found"
             })
         }
@@ -53,7 +53,7 @@ exports.deleteAccount = async (req,res)=>{
         })
     } catch (error) {
         return res.status(500).json({
-            success:false;
+            success:false,
             message:"User couldnt be deleted"
         })
     }

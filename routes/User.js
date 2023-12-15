@@ -11,7 +11,7 @@ const {
   resetPasswordToken,
   resetPassword,
 } = require("../controllers/ResetPassword")
-const { auth } = require("../middlewares/auth")
+const { auth } = require("../middleware/auth")
 
 // Route for user login
 router.post("/login", login)

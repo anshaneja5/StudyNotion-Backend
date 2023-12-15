@@ -78,7 +78,7 @@ exports.getAverageRatingAndReview = async (req,res)=>{
         //if no rating exists
         return res.status(200).json({
             success:true,
-            message:"No rating as of now"
+            message:"No rating as of now",
             averageRating:0,
         })
     } catch (error) {
@@ -92,7 +92,7 @@ exports.getAverageRatingAndReview = async (req,res)=>{
 exports.getAllRatingAndReview = async (req,res)=>{
     try {
         const allRatingAndReview = await RatingAndReviews.find({})
-        .sort(rating:"desc")
+        .sort({rating:"desc"})
         .populate({
             path:"user",
             select:"firstName lastName email image"       //only give me this data when populating

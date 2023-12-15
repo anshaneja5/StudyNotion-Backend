@@ -17,7 +17,7 @@ exports.createSection = async (req,res)=>{
             { _id : courseId},
             {
                 $push:{
-                    courseContent:newSection._id;
+                    courseContent:newSection._id
                 }
             },
             { new:true}

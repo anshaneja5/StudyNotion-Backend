@@ -1,7 +1,7 @@
 const Course = require("../models/Course");
-const Tag = require("../models/Tags");
+const Tag = require("../models/Category");
 const User = require("../models/User");
-const { uploadImageToCloudinary } = require("../utils/imageUplaoder");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 exports.createCourse = async (req, res) => {
   try {
