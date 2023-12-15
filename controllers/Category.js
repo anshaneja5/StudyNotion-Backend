@@ -26,7 +26,7 @@ exports.createCategory = async (req,res) => {
   }
 };
 
-exports.showAllCategory = async (req,res) => {
+exports.showAllCategories = async (req,res) => {
   try {
     const allCategory = await Category.find({ name: true, description: true }); //both name and desc should be present
     return res.status(200).json({
