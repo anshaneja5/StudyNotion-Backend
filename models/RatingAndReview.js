@@ -14,6 +14,12 @@ const ratingAndReviewSchema = new mongooose.Schema({
     required: true,
     trim:true;
   },
+  course: {
+		type: mongoose.Schema.Types.ObjectId,
+		required: true,
+		ref: "Course",
+		index: true, //indicates that an index should be created on the course field for faster querying.
+	},
 });
 
 module.exports=mongoose.model("RatingAndReview",ratingAndReviewSchema);
