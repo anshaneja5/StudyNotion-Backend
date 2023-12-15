@@ -45,7 +45,7 @@ exports.capturePayment = async (req,res){
     const options = {
         amount : amount*100,
         currency,
-        receipt : Math.random(Date.now().toString()); //Optional
+        receipt : Math.random(Date.now()).toString(); //Optional
         notes:{ //Optional
             courseId:course_id,
             userId,
@@ -75,7 +75,7 @@ exports.capturePayment = async (req,res){
 //verify signature of razorpay and server
 exports.verifySignature = async (req,res){
     const webhookSecret="1234567890";
-    const signature=req.headers("x-razorpay-singature"); //signature coming from razorpay, and it is hashed 
+    const signature=req.headers("x-razorpay-signature"); //signature coming from razorpay, and it is hashed 
     const shasum = crypto.createHmac("sha256",webhookSecret);
     shasum.update(JSON.stringify(req.body));
     const digest = shasum.digest("hex"); //at the end this will have the converted webhooksecret using HMAC
