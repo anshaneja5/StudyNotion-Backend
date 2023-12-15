@@ -3,6 +3,7 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const mailSender = require("../utils.mailSender");
 const {courseEnrollmentEmail}=require("../mail/templates/courseEnrollmentEmail");
+const { paymentSuccessEmail } = require("../mail/templates/paymentSuccessEmail");
 
 //Capture the payment and initiate the razorpay order  -1
 exports.capturePayment = async (req,res){
@@ -140,3 +141,33 @@ exports.verifySignature = async (req,res){
         })
     }
 }
+
+// Send Payment Success Email
+exports.sendPaymentSuccessEmail = async (req, res) => {
+    const { orderId, paymentId, amount } = req.body;
+    const userId = req.user.id;
+    if (!orderId || !paymentId || !amount || !userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please provide all the details" })
+    }
+    try {
+      const enrolledStudent = await User.findById(userId)
+      await mailSender(
+        enrolledStudent.email,
+        `Payment Received`,
+        paymentSuccessEmail(
+          `${enrolledStudent.firstName} ${enrolledStudent.lastName}`,
+          amount / 100,
+          orderId,
+          paymentId
+        )
+      )
+    } catch (error) {
+      console.log("error in sending mail", error)
+      return res
+        .status(400)
+        .json({ success: false, message: "Could not send email" })
+    }
+}
+  

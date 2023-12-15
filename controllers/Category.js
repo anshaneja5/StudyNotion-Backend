@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const RatingAndReview = require("../models/RatingAndReview");
 
 exports.createCategory = async (req,res) => {
   try {
@@ -40,3 +41,26 @@ exports.showAllCategory = async (req,res) => {
     });
   }
 };
+
+exports.categoryPageDetails = async (req,res)=>{
+  try {
+    const {categoryId} = req.body;
+    //find selected category from db
+    const selectedCategory = await Category.findById(categoryId).populate(courses).exec();
+    //validation
+    if(!selectedCategory){
+      return res.status(404).json({
+        success:false,
+        message:"Courses not Found"
+      })
+    }
+    //now get courses of different category
+    const differentCategories = await Category.find({
+      _id : {$ne : categoryId}         //find all the courses not equal to category id
+    }).populate(courses).exec();
+    //now get top selling courses
+    
+  } catch (error) {
+    
+  }
+}
