@@ -84,7 +84,7 @@ exports.signup = async (req, res) => {
         message: "Both passwords don't match",
       });
     }
-    const existingUser = await findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -94,15 +94,17 @@ exports.signup = async (req, res) => {
     const recentOtp = await OTP.find({ email })
       .sort({ createdAt: -1 })
       .limit(1); //To Get the topmost otp after sorting in descending order
+      // console.log(recentOtp[0].otp);
     if (recentOtp.length == 0) {
       return res.status(400).json({
         success: false,
         message: "OTP not Found",
       });
-    } else if (otp !== recentOtp.otp) {
+    } else if (otp != recentOtp[0].otp) {
       return res.status(400).json({
         success: false,
         message: "Invalid OTP",
+        otp:`${recentOtp[0].otp}`
       });
     }
     //Hashing Password
@@ -118,22 +120,21 @@ exports.signup = async (req, res) => {
       firstName,
       lastName,
       email,
-      password: hashedPassword,
-      confirmPassword,
-      otp,
-      accountType,
       contactNumber,
-      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`, //DiceBear api will convert Random Name to RN img
+      password: hashedPassword,
+      accountType:accountType,
       additionalDetails: profileDetails._id,
+      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`, //DiceBear api will convert Random Name to RN img
     });
     return res.status(200).json({
       success: true,
       message: "User Registered Sucessfuly",
+      user: user
     });
   } catch (err) {
     return res.status(400).json({
       success: false,
-      message: err,
+      message: err.message,
     });
   }
 };
@@ -150,11 +151,12 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     //If user dont exist
     if (!user) {
-      return res.status(403).json({
+      return res.status(404).json({
         success: false,
         message: "User does not exist",
       });
     }
+    console.log(user);
     if (await bcrypt.compare(password, user.password)) {
       const payload = {
         email: user.email,

@@ -5,9 +5,9 @@ exports.auth = async (req, res, next) => {
   //Checking Authentication
   try {
     const token =
-      req.header("Authorization").replace("Bearer", "") ||
-      req.body.token ||
-      req.cookies.token;
+      req.cookies.token || 
+      req.header("Authorisation").replace("Bearer", "") ||
+      req.body.token;
     if (!token) {
       return res.status(401).json({
         success: false,

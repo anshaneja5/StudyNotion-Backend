@@ -1,16 +1,11 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
+const {uploadImageToCloudinary} = require("../utils/imageUploader");
 
 exports.updateProfile = async (req,res)=>{
     try {
-        const {gender,about="",contactNumber,dateOfBirth=""}=req.body;
+        const {gender="",about="",contactNumber="",dateOfBirth=""}=req.body;
         const id=req.user.id; //user id already present in req as added in middleware auth
-        if(!contactNumber || !gender || !id){
-            return res.status(400).json({
-                success:false,
-                message:"All fields are required"
-            })
-        }
         const userDetails = await User.findById(id);
         const profileId = userDetails.additionDetails;
         const profileDetails = await Profile.findById(profileId); //did this as profile was already marked null before, which means we only had to update it here
@@ -20,14 +15,19 @@ exports.updateProfile = async (req,res)=>{
         profileDetails.dateOfBirth=dateOfBirth;
         //after updating successfully, we'll just save it in DB
         await profileDetails.save();
-        return res.status(200).json({
-            success:true,
-            message:"Profile Updated Sucessfully"
+        // Find the updated user details
+        const updatedUserDetails = await User.findById(id)
+        .populate("additionalDetails")
+        .exec()
+        return res.json({
+        success: true,
+        message: "Profile updated successfully",
+        updatedUserDetails,
         })
     } catch (error) {
         return res.status(400).json({
             success:false,
-            message:"Profile Cant be Created"
+            message:`Profile Cant be Created ${error.message}`
         })
     }
 }
@@ -58,3 +58,33 @@ exports.deleteAccount = async (req,res)=>{
         })
     }
 }
+
+exports.updateDisplayPicture = async (req, res) => {
+    try {
+      const displayPicture = req.files.displayPicture
+      const userId = req.user.id
+      const image = await uploadImageToCloudinary(
+        displayPicture,
+        process.env.FOLDER_NAME,
+        1000,
+        1000
+      )
+      console.log(image)
+      const updatedProfile = await User.findByIdAndUpdate(
+        { _id: userId },
+        { image: image.secure_url },
+        { new: true }
+      )
+      res.send({
+        success: true,
+        message: `Image Updated successfully`,
+        data: updatedProfile,
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: `Cannot Update profile picture ${error.message}`,
+      })
+    }
+};
+  
