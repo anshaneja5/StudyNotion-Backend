@@ -7,8 +7,7 @@ exports.createCourse = async (req, res) => {
   try {
     //fetch data
     const { courseName, courseDescription, whatYouWillLearn, price, category} = req.body; //here tag is ID
-    const { thumbnail } = req.files.thumbnailImage;
-
+    const thumbnail = req.files.thumbnailImage;
     //validation
     if (
       !courseName ||
@@ -78,6 +77,7 @@ exports.createCourse = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Course created sucessfully",
+      data:newCourse
     });
   } catch (err) {
     return res.status(400).json({

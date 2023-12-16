@@ -1,5 +1,5 @@
 const mailSender = require("../utils/mailSender");
-const contactUsEmail = require("../mail/templates/contactUs");
+const {contactUsEmail} = require("../mail/templates/contactUs");
 
 exports.contactUs = async (req,res)=>{
     try {
@@ -17,6 +17,7 @@ exports.contactUs = async (req,res)=>{
         return res.json({
             success: false,
             message: "Something went wrong...",
+            error:error.message
         })
     }
 }
