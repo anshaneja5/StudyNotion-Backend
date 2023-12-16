@@ -1,12 +1,12 @@
 const Course = require("../models/Course");
-const Tag = require("../models/Category");
+const Category = require("../models/Category");
 const User = require("../models/User");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 exports.createCourse = async (req, res) => {
   try {
     //fetch data
-    const { courseName, courseDescription, whatYouWillLearn, price, tag } = req.body; //here tag is ID
+    const { courseName, courseDescription, whatYouWillLearn, price, category} = req.body; //here tag is ID
     const { thumbnail } = req.files.thumbnailImage;
 
     //validation
@@ -15,9 +15,9 @@ exports.createCourse = async (req, res) => {
       !courseDescription ||
       !whatYouWillLearn ||
       !price ||
-      !tag
+      !category
     ) {
-      return re.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "All fields are Required",
       });
@@ -31,17 +31,20 @@ exports.createCourse = async (req, res) => {
         message: "Instructor details not found",
       });
     }
-    const tagDetails = await Tag.findById(tag);
-    if (!tagDetails) {
+    const categoryDetails = await Category.findById(category);
+    if (!categoryDetails) {
       return res.status(404).json({
         success: false,
-        message: "Tag details not found",
+        message: "Category details not found",
       });
     }
     const thumbnailImage = await uploadImageToCloudinary(
       thumbnail,
-      process.env.FOLDER_NAME
+      process.env.FOLDER_NAME,
+      1000,
+      1000
     );
+    console.log("g")
     //create an entry for new course
     const newCourse = await Course.create({
       courseName,
@@ -49,7 +52,7 @@ exports.createCourse = async (req, res) => {
       instructor: instructorDetails._id,
       whatYouWillLearn,
       price,
-      tag: tagDetails._id,
+      category: categoryDetails._id,
       thumbnail: thumbnailImage.secure_url,
     });
     //add new course to user schema of instructor
@@ -63,8 +66,8 @@ exports.createCourse = async (req, res) => {
       { new: true }
     );
     //update tags schema
-    await Tag.findOneAndUpdate(
-      { _id: tagDetails._id },
+    await Category.findOneAndUpdate(
+      { _id: categoryDetails._id },
       {
         $push: {
           course: newCourse._id,
@@ -80,6 +83,7 @@ exports.createCourse = async (req, res) => {
     return res.status(400).json({
       success: false,
       message: "Course addition failed",
+      error:err.message
     });
   }
 };

@@ -42,6 +42,7 @@ exports.sendOTP = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "OTP sent Sucessfully",
+      otp:otp
     });
   } catch (err) {
     return res.status(500).json({
@@ -129,7 +130,7 @@ exports.signup = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User Registered Sucessfuly",
-      user: user
+      data:user
     });
   } catch (err) {
     return res.status(400).json({
@@ -182,7 +183,7 @@ exports.login = async (req, res) => {
     } else {
       return res.status(401).json({
         success: false,
-        message: `Password don't match`,
+        message: `Incorrect Password`,
       });
     }
   } catch (err) {
