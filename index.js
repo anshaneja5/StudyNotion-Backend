@@ -18,7 +18,7 @@ app.use(express.json());  //middleware setup
 app.use(cookieParser());  //middleware setup
 app.use(
     cors({   //to entertain req from frontend
-        origin:"https://localhost:3000" ,
+        origin:"http://localhost:3000" ,
         credential:true,     
     })
 )
@@ -34,7 +34,7 @@ app.use("/api/v1/auth",userRoutes);
 app.use("/api/v1/profile",profileRoutes);
 app.use("/api/v1/payment",paymentRoutes);
 app.use("/api/v1/course",courseRoutes);
-app.use("/api/v1/studynotion",contactUsRoutes)
+app.use("/api/v1/reach",contactUsRoutes)
 //Default Route
 app.get("/",(req,res)=>{
     return res.json({

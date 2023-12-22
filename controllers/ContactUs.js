@@ -3,11 +3,11 @@ const {contactUsEmail} = require("../mail/templates/contactUs");
 
 exports.contactUs = async (req,res)=>{
     try {
-        const {fName,lName,email,phoneNum,message,countryCode} = req.body;
+        const {countrycode,email,firstname,lastname,message,phoneNo} = req.body;
         await mailSender(
             email,
             "StudyNotion",
-            contactUsEmail(email,fName,lName,message,phoneNum,countryCode)
+            contactUsEmail(email,firstname,lastname,message,phoneNo,countrycode)
         );
         return res.json({
             success: true,

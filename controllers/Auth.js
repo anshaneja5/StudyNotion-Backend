@@ -79,7 +79,9 @@ exports.signup = async (req, res) => {
       });
     }
     //Validate Password
-    if (password !== confirmPassword) {
+    // console.log(password);
+    // console.log(confirmPassword);
+    if (password != confirmPassword) {
       return res.status(400).json({
         success: false,
         message: "Both passwords don't match",
