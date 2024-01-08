@@ -6,7 +6,7 @@ exports.auth = async (req, res, next) => {
   try {
     const token =
       req.cookies.token || 
-      req.header("Authorisation").replace("Bearer ", "") ||
+      req.header("Authorisation").replace("Bearer ", "") ||   //real spelling is Authorization, spelling mistake in whole project
       req.body.token;
     if (!token) {
       return res.status(401).json({
