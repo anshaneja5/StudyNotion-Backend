@@ -1,6 +1,8 @@
 const Category = require("../models/Category");
 const RatingAndReview = require("../models/RatingAndReview");
-
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
 exports.createCategory = async (req,res) => {
   try {
     const { name, description } = req.body;
