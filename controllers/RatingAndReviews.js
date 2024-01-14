@@ -1,4 +1,4 @@
-const RatingAndReviews = require("../models/RatingAndReview");
+const RatingAndReview = require("../models/RatingAndReview");
 const Course = require("../models/Course");
 
 exports.createRatingAndReview = async (req,res)=>{
@@ -28,7 +28,7 @@ exports.createRatingAndReview = async (req,res)=>{
             })
         }
         //if not then give rating and review
-        const ratingReview = await RatingAndReviews.create({rating,review,user:userId,course:courseId});
+        const ratingReview = await RatingAndReview.create({rating,review,user:userId,course:courseId});
         //and also update it in Course
         await Course.findByIdAndUpdate(
             {_id:courseId},
@@ -44,7 +44,7 @@ exports.createRatingAndReview = async (req,res)=>{
             message:"Rated and Reviewd Successfully"
         })
     } catch (error) {
-        return status(500).json({
+        return res.status(500).json({
             success:false,
             message:"Cannot rate and review"
         })
@@ -55,7 +55,7 @@ exports.getAverageRatingAndReview = async (req,res)=>{
     try {
         const {courseId}=req.body;
         //calculate avg rating
-        const result = await RatingAndReviews.aggregate([
+        const result = await RatingAndReview.aggregate([
             {
                 $match:{
                     course: new mongoose.Types.ObjectId(courseId), //all course with given courseId in ratingandreview collection
@@ -89,9 +89,9 @@ exports.getAverageRatingAndReview = async (req,res)=>{
     }
 }
 
-exports.getAllRatingAndReview = async (req,res)=>{
+exports.getAllRating = async (req,res)=>{
     try {
-        const allRatingAndReview = await RatingAndReviews.find({})
+        const allRatingAndReview = await RatingAndReview.find({})
         .sort({rating:"desc"})
         .populate({
             path:"user",
@@ -104,7 +104,7 @@ exports.getAllRatingAndReview = async (req,res)=>{
         return res.status(200).json({
             success:true,
             message:"All rating and review fetched sucessfully",
-            getAllRatingAndReview
+            allRatingAndReview
         })
     } catch (error) {
         return res.status(500).json({

@@ -36,7 +36,7 @@ const {
 const {
   createRatingAndReview,
   getAverageRatingAndReview,
-  getAllRatingAndReview,
+  getAllRating,
 } = require("../controllers/RatingAndReviews")
 
 const {
@@ -86,6 +86,6 @@ router.post("/getCategoryPageDetails", categoryPageDetails)
 
 router.post("/createRating", auth, isStudent, createRatingAndReview)
 router.get("/getAverageRating", getAverageRatingAndReview)
-router.get("/getReviews", getAllRatingAndReview)
+router.get("/getReviews", getAllRating)
 
 module.exports = router
