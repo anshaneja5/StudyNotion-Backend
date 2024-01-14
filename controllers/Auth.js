@@ -168,7 +168,7 @@ exports.login = async (req, res) => {
       };
       //Created JWT Token
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "5h",
+        expiresIn: "25h",
       });
       user.token = token;
       user.password = undefined;

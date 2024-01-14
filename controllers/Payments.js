@@ -6,6 +6,7 @@ const mailSender = require("../utils/mailSender");
 const {courseEnrollmentEmail}=require("../mail/templates/courseEnrollmentEmail");
 const { paymentSuccessEmail } = require("../mail/templates/paymentSuccessEmail");
 const mongoose = require("mongoose")
+const crypto = require("crypto");
 //initiate the razorpay order
 
 exports.capturePayment = async(req, res) => {
@@ -69,7 +70,6 @@ exports.verifyPayment = async(req, res) => {
     const razorpay_signature = req.body?.razorpay_signature;
     const courses = req.body?.courses;
     const userId = req.user.id;
-
     if(!razorpay_order_id ||
         !razorpay_payment_id ||
         !razorpay_signature || !courses || !userId) {
@@ -78,7 +78,7 @@ exports.verifyPayment = async(req, res) => {
     //Acc to Razorpay Docs
     let body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
-        .createHmac("sha256", process.env.RAZORPAY_SECRET)
+        .createHmac("sha256", process.env.REACT_APP_RAZORPAY_SECRET)
         .update(body.toString())
         .digest("hex");
 
@@ -141,15 +141,12 @@ const enrollStudents = async(courses, userId, res) => {
 
 exports.sendPaymentSuccessEmail = async(req, res) => {
     const {orderId, paymentId, amount} = req.body;
-
     const userId = req.user.id;
-
     if(!orderId || !paymentId || !amount || !userId) {
         return res.status(400).json({success:false, message:"Please provide all the fields"});
     }
 
     try{
-        //student ko dhundo
         const enrolledStudent = await User.findById(userId);
         await mailSender(
             enrolledStudent.email,
