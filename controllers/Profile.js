@@ -10,7 +10,7 @@ exports.updateProfile = async (req,res)=>{
         const {gender="",about="",contactNumber="",dateOfBirth=""}=req.body;
         const id=req.user.id; //user id already present in req as added in middleware auth
         const userDetails = await User.findById(id);
-        const profileId = userDetails.additionDetails;
+        const profileId = userDetails.additionalDetails;
         const profileDetails = await Profile.findById(profileId); //did this as profile was already marked null before, which means we only had to update it here
         profileDetails.gender=gender;
         profileDetails.about=about;
@@ -176,3 +176,30 @@ exports.getEnrolledCourses = async (req, res) => {
 	  })
 	}
   }
+
+  exports.instructorDashboard = async(req, res) => {
+	try{
+		const courseDetails = await Course.find({instructor:req.user.id});
+
+		const courseData  = courseDetails.map((course)=> {
+			const totalStudentsEnrolled = course.studentsEnrolled.length
+			const totalAmountGenerated = totalStudentsEnrolled * course.price
+
+			//create an new object with the additional fields
+			const courseDataWithStats = {
+				_id: course._id,
+				courseName: course.courseName,
+				courseDescription: course.courseDescription,
+				totalStudentsEnrolled,
+				totalAmountGenerated,
+			}
+			return courseDataWithStats
+		})
+		res.status(200).json({courses:courseData});
+
+	}
+	catch(error) {
+		console.error(error);
+		res.status(500).json({message:"Internal Server Error"});
+	}
+}

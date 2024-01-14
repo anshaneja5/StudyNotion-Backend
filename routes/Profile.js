@@ -6,7 +6,8 @@ const {
   updateProfile,
   updateDisplayPicture,
   getUserDetails,
-  getEnrolledCourses
+  getEnrolledCourses,
+  instructorDashboard
 } = require("../controllers/Profile")
 
 // Delete User Account
@@ -15,4 +16,5 @@ router.put("/updateProfile", auth, updateProfile)
 router.put("/updateDisplayPicture", auth, updateDisplayPicture)
 router.get("/getUserDetails",auth,getUserDetails)
 router.get("/getEnrolledCourses", auth, getEnrolledCourses)
+router.get("/instructorDashboard", auth, isInstructor, instructorDashboard)
 module.exports = router
