@@ -125,7 +125,7 @@ const enrollStudents = async(courses, userId, res) => {
                 courseProgress: courseProgress._id,
             }},{new:true})
         const emailResponse = await mailSender(
-            enrollStudents.email,
+            enrolledStudent.email,
             `Successfully Enrolled into ${enrolledCourse.courseName}`,
             courseEnrollmentEmail(enrolledCourse.courseName, `${enrolledStudent.firstName}`)
         )    
@@ -151,8 +151,7 @@ exports.sendPaymentSuccessEmail = async(req, res) => {
         await mailSender(
             enrolledStudent.email,
             `Payment Recieved`,
-             paymentSuccessEmail(`${enrolledStudent.firstName}`,
-             amount/100,orderId, paymentId)
+             paymentSuccessEmail(`${enrolledStudent.firstName}`,amount/100,orderId, paymentId)
         )
     }
     catch(error) {
